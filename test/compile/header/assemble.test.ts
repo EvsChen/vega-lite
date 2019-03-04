@@ -27,10 +27,15 @@ describe('compile/header/index', () => {
   });
 
   describe('labelAlign', () => {
-    it('label aligns correctly according to angle', () => {
-      expect(labelAlign(23)).toEqual({align: {value: 'right'}});
-      expect(labelAlign(135)).toEqual({align: {value: 'left'}});
-      expect(labelAlign(50)).toEqual({align: {value: 'right'}});
+    it('label aligns correctly according to angle for facetChannel=row', () => {
+      expect(labelAlign(23, 'row')).toEqual({align: {value: 'right'}});
+      expect(labelAlign(135, 'row')).toEqual({align: {value: 'left'}});
+      expect(labelAlign(50, 'row')).toEqual({align: {value: 'right'}});
+    });
+    it('label aligns correctly according to angle for facetChannel=column', () => {
+      expect(labelAlign(23, 'column')).toEqual({align: {value: 'right'}});
+      expect(labelAlign(180, 'column')).toEqual({});
+      expect(labelAlign(250, 'column')).toEqual({align: {value: 'left'}});
     });
   });
 
