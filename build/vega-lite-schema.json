@@ -85,6 +85,19 @@
       ],
       "type": "string"
     },
+    "AnchorValue": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TitleAnchor"
+        },
+        {
+          "$ref": "#/definitions/AnchorValueRef"
+        }
+      ]
+    },
+    "AnchorValueRef": {
+      "$ref": "#/definitions/ScaledValueRef<TitleAnchor>"
+    },
     "AnyMark": {
       "anyOf": [
         {
@@ -207,7 +220,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "point": {
@@ -306,9 +319,28 @@
             }
           ],
           "description": "The tooltip text string to show upon mouse hover or an object defining which fields should the tooltip be derived from.\n\n- If `tooltip` is `{\"content\": \"encoding\"}`, then all fields from `encoding` will be used.\n- If `tooltip` is `{\"content\": \"data\"}`, then all fields that appear in the highlighted data point will be used.\n- If set to `null`, then no tooltip will be used."
+        },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
         }
       },
       "type": "object"
+    },
+    "ArrayValueRef": {
+      "$ref": "#/definitions/ScaledValueRef<any[]>"
     },
     "AutoSizeParams": {
       "additionalProperties": false,
@@ -355,6 +387,17 @@
           "$ref": "#/definitions/Color",
           "description": "Color of axis domain line.\n\n__Default value:__ `\"gray\"`."
         },
+        "domainDash": {
+          "description": "An array of alternating [stroke, space] lengths for dashed domain lines.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "domainDashOffset": {
+          "description": "The pixel offset at which to start drawing with the domain dash array.",
+          "type": "number"
+        },
         "domainOpacity": {
           "description": "Opacity of the axis domain line.",
           "type": "number"
@@ -376,11 +419,15 @@
           "description": "Color of gridlines.\n\n__Default value:__ `\"lightGray\"`."
         },
         "gridDash": {
-          "description": "The offset (in pixels) into which to begin drawing with the grid dash array.",
+          "description": "An array of alternating [stroke, space] lengths for dashed grid lines.",
           "items": {
             "type": "number"
           },
           "type": "array"
+        },
+        "gridDashOffset": {
+          "description": "The pixel offset at which to start drawing with the grid dash array.",
+          "type": "number"
         },
         "gridOpacity": {
           "description": "The stroke opacity of grid (value between [0,1])\n\n__Default value:__ `1`",
@@ -498,6 +545,17 @@
           "description": "A desired number of ticks, for axes visualizing quantitative scales. The resulting number may be different so that values are \"nice\" (multiples of 2, 5, 10) and lie within the underlying scale's range.",
           "type": "number"
         },
+        "tickDash": {
+          "description": "An array of alternating [stroke, space] lengths for dashed tick mark lines.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "tickDashOffset": {
+          "description": "The pixel offset at which to start drawing with the tick mark dash array.",
+          "type": "number"
+        },
         "tickExtra": {
           "description": "Boolean flag indicating if an extra axis tick should be added for the initial position of the axis. This flag is useful for styling axes for `band` scales such that ticks are placed on band boundaries rather in the middle of a band. Use in conjunction with `\"bandPostion\": 1` and an axis `\"padding\"` value of `0`.",
           "type": "boolean"
@@ -542,6 +600,10 @@
         "titleAlign": {
           "$ref": "#/definitions/Align",
           "description": "Horizontal text alignment of axis titles."
+        },
+        "titleAnchor": {
+          "$ref": "#/definitions/AnchorValue",
+          "description": "Text anchor position for placing axis titles."
         },
         "titleAngle": {
           "description": "Angle in degrees of axis titles.",
@@ -645,6 +707,17 @@
           "$ref": "#/definitions/Color",
           "description": "Color of axis domain line.\n\n__Default value:__ `\"gray\"`."
         },
+        "domainDash": {
+          "description": "An array of alternating [stroke, space] lengths for dashed domain lines.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "domainDashOffset": {
+          "description": "The pixel offset at which to start drawing with the domain dash array.",
+          "type": "number"
+        },
         "domainOpacity": {
           "description": "Opacity of the axis domain line.",
           "type": "number"
@@ -662,11 +735,15 @@
           "description": "Color of gridlines.\n\n__Default value:__ `\"lightGray\"`."
         },
         "gridDash": {
-          "description": "The offset (in pixels) into which to begin drawing with the grid dash array.",
+          "description": "An array of alternating [stroke, space] lengths for dashed grid lines.",
           "items": {
             "type": "number"
           },
           "type": "array"
+        },
+        "gridDashOffset": {
+          "description": "The pixel offset at which to start drawing with the grid dash array.",
+          "type": "number"
         },
         "gridOpacity": {
           "description": "The stroke opacity of grid (value between [0,1])\n\n__Default value:__ `1`",
@@ -772,6 +849,17 @@
           "$ref": "#/definitions/Color",
           "description": "The color of the axis's tick.\n\n__Default value:__ `\"gray\"`"
         },
+        "tickDash": {
+          "description": "An array of alternating [stroke, space] lengths for dashed tick mark lines.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "tickDashOffset": {
+          "description": "The pixel offset at which to start drawing with the tick mark dash array.",
+          "type": "number"
+        },
         "tickExtra": {
           "description": "Boolean flag indicating if an extra axis tick should be added for the initial position of the axis. This flag is useful for styling axes for `band` scales such that ticks are placed on band boundaries rather in the middle of a band. Use in conjunction with `\"bandPostion\": 1` and an axis `\"padding\"` value of `0`.",
           "type": "boolean"
@@ -802,9 +890,17 @@
           "description": "Boolean value that determines whether the axis should include ticks.\n\n__Default value:__ `true`",
           "type": "boolean"
         },
+        "title": {
+          "description": "Set to null to disable title for the axis or legend",
+          "type": "null"
+        },
         "titleAlign": {
           "$ref": "#/definitions/Align",
           "description": "Horizontal text alignment of axis titles."
+        },
+        "titleAnchor": {
+          "$ref": "#/definitions/AnchorValue",
+          "description": "Text anchor position for placing axis titles."
         },
         "titleAngle": {
           "description": "Angle in degrees of axis titles.",
@@ -990,7 +1086,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "radius": {
@@ -1072,6 +1168,22 @@
             }
           ],
           "description": "The tooltip text string to show upon mouse hover or an object defining which fields should the tooltip be derived from.\n\n- If `tooltip` is `{\"content\": \"encoding\"}`, then all fields from `encoding` will be used.\n- If `tooltip` is `{\"content\": \"data\"}`, then all fields that appear in the highlighted data point will be used.\n- If set to `null`, then no tooltip will be used."
+        },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
         }
       },
       "type": "object"
@@ -1090,6 +1202,64 @@
         },
         "type": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BaseLegendLayout": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor": {
+          "$ref": "#/definitions/TitleAnchor",
+          "description": "The anchor point for legend orient group layout."
+        },
+        "bounds": {
+          "$ref": "#/definitions/LayoutBounds",
+          "description": "The bounds calculation to use for legend orient group layout."
+        },
+        "center": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "A flag to center legends within a shared orient group."
+        },
+        "direction": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Orientation"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "The layout direction for legend orient group layout."
+        },
+        "margin": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "The pixel margin between legends within a orient group."
+        },
+        "offset": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "The pixel offset from the chart body for a legend orient group."
         }
       },
       "type": "object"
@@ -1181,7 +1351,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "radius": {
@@ -1252,6 +1422,22 @@
         },
         "tooltip": {
           "description": "The tooltip text to show upon mouse hover."
+        },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
         }
       },
       "type": "object"
@@ -1314,6 +1500,167 @@
         }
       },
       "type": "object"
+    },
+    "BaseValueRef<Orient>": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SignalRef"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/Orient"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "field"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "range": {
+              "type": [
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "required": [
+            "range"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "BaseValueRef<TitleAnchor>": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SignalRef"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/TitleAnchor"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "field"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "range": {
+              "type": [
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "required": [
+            "range"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "BaseValueRef<any[]>": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SignalRef"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "anyOf": [
+                {
+                  "items": {
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "field": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "field"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "range": {
+              "type": [
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "required": [
+            "range"
+          ],
+          "type": "object"
+        }
+      ]
     },
     "Baseline": {
       "enum": [
@@ -1667,7 +2014,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "Orientation of the box plot.  This is normally automatically determined based on types of fields on x and y channels. However, an explicit `orient` be specified when the orientation is ambiguous.\n\n__Default value:__ `\"vertical\"`."
         },
         "outliers": {
@@ -1982,7 +2329,7 @@
               "$ref": "#/definitions/XValueDef"
             }
           ],
-          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"`.\n\nThe `value` of this channel can be a number or a string `\"width\"`."
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.\n\nThe `value` of this channel can be a number or a string `\"width\"`."
         },
         "x2": {
           "anyOf": [
@@ -2026,7 +2373,7 @@
               "$ref": "#/definitions/YValueDef"
             }
           ],
-          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"`.\n\nThe `value` of this channel can be a number or a string `\"height\"`."
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`\n\nThe `value` of this channel can be a number or a string `\"height\"`."
         },
         "y2": {
           "anyOf": [
@@ -2089,6 +2436,20 @@
           "$ref": "#/definitions/ErrorBandDef"
         }
       ]
+    },
+    "CompositionConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "columns": {
+          "description": "The number of columns to include in the view composition layout.\n\n__Default value__: `undefined` -- An infinite number of columns (a single row) will be assumed. This is equivalent to\n`hconcat` (for `concat`) and to using the `column` channel (for `facet` and `repeat`).\n\n__Note__:\n\n1) This property is only for:\n- the general (wrappable) `concat` operator (not `hconcat`/`vconcat`)\n- the `facet` and `repeat` operator with one field/repetition definition (without row/column nesting)\n\n2) Setting the `columns` to `1` is equivalent to `vconcat` (for `concat`) and to using the `row` channel (for `facet` and `repeat`).",
+          "type": "number"
+        },
+        "spacing": {
+          "description": "The default spacing in pixels between composed sub-views.\n\n__Default value__: `20`",
+          "type": "number"
+        }
+      },
+      "type": "object"
     },
     "ConditionOnlyDef<MarkPropFieldDef<\"nominal\">>": {
       "additionalProperties": false,
@@ -3175,6 +3536,10 @@
           "$ref": "#/definitions/MarkConfig",
           "description": "Circle-Specific Config"
         },
+        "concat": {
+          "$ref": "#/definitions/CompositionConfig",
+          "description": "Default configuration for all concatenation view composition operators (`concat`, `hconcat`, and `vconcat`)"
+        },
         "countTitle": {
           "description": "Default axis and legend title for count fields.\n\n__Default value:__ `'Count of Records`.",
           "type": "string"
@@ -3186,6 +3551,10 @@
         "errorbar": {
           "$ref": "#/definitions/ErrorBarConfig",
           "description": "ErrorBar Config"
+        },
+        "facet": {
+          "$ref": "#/definitions/CompositionConfig",
+          "description": "Default configuration for the `facet` view composition operator"
         },
         "fieldTitle": {
           "description": "Defines how Vega-Lite generates title for fields.  There are three possible styles:\n- `\"verbal\"` (Default) - displays function in a verbal style (e.g., \"Sum of field\", \"Year-month of date\", \"field (binned)\").\n- `\"function\"` - displays function using parentheses and capitalized texts (e.g., \"SUM(field)\", \"YEARMONTH(date)\", \"BIN(field)\").\n- `\"plain\"` - displays only the field name without functions (e.g., \"field\", \"date\", \"field\").",
@@ -3250,6 +3619,10 @@
         "rect": {
           "$ref": "#/definitions/MarkConfig",
           "description": "Rect-Specific Config"
+        },
+        "repeat": {
+          "$ref": "#/definitions/CompositionConfig",
+          "description": "Default configuration for the `repeat` view composition operator"
         },
         "rule": {
           "$ref": "#/definitions/MarkConfig",
@@ -3368,6 +3741,19 @@
       ],
       "type": "string"
     },
+    "DashArrayValue": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        {
+          "$ref": "#/definitions/ArrayValueRef"
+        }
+      ]
+    },
     "Data": {
       "anyOf": [
         {
@@ -3471,6 +3857,18 @@
           "type": "number"
         }
       },
+      "type": "object"
+    },
+    "DatumFieldRef": {
+      "additionalProperties": false,
+      "properties": {
+        "datum": {
+          "$ref": "#/definitions/Field"
+        }
+      },
+      "required": [
+        "datum"
+      ],
       "type": "object"
     },
     "Day": {
@@ -3643,7 +4041,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "Orientation of the error band. This is normally automatically determined, but can be specified when the orientation is ambiguous and cannot be automatically determined."
         },
         "tension": {
@@ -3718,7 +4116,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "Orientation of the error bar.  This is normally automatically determined, but can be specified when the orientation is ambiguous and cannot be automatically determined."
         },
         "rule": {
@@ -4065,7 +4463,7 @@
               "$ref": "#/definitions/XValueDef"
             }
           ],
-          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"`.\n\nThe `value` of this channel can be a number or a string `\"width\"`."
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.\n\nThe `value` of this channel can be a number or a string `\"width\"`."
         },
         "x2": {
           "anyOf": [
@@ -4109,7 +4507,7 @@
               "$ref": "#/definitions/YValueDef"
             }
           ],
-          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"`.\n\nThe `value` of this channel can be a number or a string `\"height\"`."
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`\n\nThe `value` of this channel can be a number or a string `\"height\"`."
         },
         "y2": {
           "anyOf": [
@@ -4233,7 +4631,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "title": {
           "anyOf": [
@@ -4273,7 +4671,16 @@
           "type": "string"
         },
         {
-          "$ref": "#/definitions/RepeatRef"
+          "$ref": "#/definitions/SignalRef"
+        },
+        {
+          "$ref": "#/definitions/DatumFieldRef"
+        },
+        {
+          "$ref": "#/definitions/GroupFieldRef"
+        },
+        {
+          "$ref": "#/definitions/ParentFieldRef"
         }
       ]
     },
@@ -5248,7 +5655,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "title": {
           "anyOf": [
@@ -5348,7 +5755,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "spec": {
           "anyOf": [
@@ -5530,7 +5937,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "spec": {
           "$ref": "#/definitions/Spec",
@@ -5725,6 +6132,21 @@
       ],
       "type": "object"
     },
+    "GroupFieldRef": {
+      "additionalProperties": false,
+      "properties": {
+        "group": {
+          "$ref": "#/definitions/Field"
+        },
+        "level": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "group"
+      ],
+      "type": "object"
+    },
     "Header": {
       "additionalProperties": false,
       "description": "Headers of row / column channels for faceted plots.",
@@ -5768,8 +6190,8 @@
           ]
         },
         "titleAnchor": {
-          "description": "The anchor position for placing the title. One of `\"start\"`, `\"middle\"`, or `\"end\"`. For example, with an orientation of top these anchor positions map to a left-, center-, or right-aligned title.\n\n__Default value:__ `\"middle\"` for [single](https://vega.github.io/vega-lite/docs/spec.html) and [layered](https://vega.github.io/vega-lite/docs/layer.html) views.\n`\"start\"` for other composite views.\n\n__Note:__ [For now](https://github.com/vega/vega-lite/issues/2875), `anchor` is only customizable only for [single](https://vega.github.io/vega-lite/docs/spec.html) and [layered](https://vega.github.io/vega-lite/docs/layer.html) views.  For other composite views, `anchor` is always `\"start\"`.",
-          "type": "string"
+          "$ref": "#/definitions/TitleAnchor",
+          "description": "The anchor position for placing the title. One of `\"start\"`, `\"middle\"`, or `\"end\"`. For example, with an orientation of top these anchor positions map to a left-, center-, or right-aligned title."
         },
         "titleAngle": {
           "description": "The rotation angle of the header title.\n\n__Default value:__ `0`.",
@@ -5840,8 +6262,8 @@
           "type": "number"
         },
         "titleAnchor": {
-          "description": "The anchor position for placing the title. One of `\"start\"`, `\"middle\"`, or `\"end\"`. For example, with an orientation of top these anchor positions map to a left-, center-, or right-aligned title.\n\n__Default value:__ `\"middle\"` for [single](https://vega.github.io/vega-lite/docs/spec.html) and [layered](https://vega.github.io/vega-lite/docs/layer.html) views.\n`\"start\"` for other composite views.\n\n__Note:__ [For now](https://github.com/vega/vega-lite/issues/2875), `anchor` is only customizable only for [single](https://vega.github.io/vega-lite/docs/spec.html) and [layered](https://vega.github.io/vega-lite/docs/layer.html) views.  For other composite views, `anchor` is always `\"start\"`.",
-          "type": "string"
+          "$ref": "#/definitions/TitleAnchor",
+          "description": "The anchor position for placing the title. One of `\"start\"`, `\"middle\"`, or `\"end\"`. For example, with an orientation of top these anchor positions map to a left-, center-, or right-aligned title."
         },
         "titleAngle": {
           "description": "The rotation angle of the header title.\n\n__Default value:__ `0`.",
@@ -6445,6 +6867,25 @@
       ],
       "type": "string"
     },
+    "LayoutBounds": {
+      "anyOf": [
+        {
+          "enum": [
+            "full"
+          ],
+          "type": "string"
+        },
+        {
+          "enum": [
+            "flush"
+          ],
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/SignalRef"
+        }
+      ]
+    },
     "Legend": {
       "additionalProperties": false,
       "description": "Properties of a legend or boolean flag for determining whether to show it.",
@@ -6577,6 +7018,14 @@
           "$ref": "#/definitions/Color",
           "description": "Border stroke color for the full legend."
         },
+        "symbolDash": {
+          "$ref": "#/definitions/DashArrayValue",
+          "description": "An array of alternating [stroke, space] lengths for dashed symbol strokes."
+        },
+        "symbolDashOffset": {
+          "description": "The pixel offset at which to start drawing with the symbol stroke dash array.",
+          "type": "number"
+        },
         "symbolFillColor": {
           "$ref": "#/definitions/Color",
           "description": "The color of the legend symbol,"
@@ -6626,6 +7075,10 @@
           "$ref": "#/definitions/Align",
           "description": "Horizontal text alignment for legend titles.\n\n__Default value:__ `\"left\"`."
         },
+        "titleAnchor": {
+          "$ref": "#/definitions/AnchorValue",
+          "description": "Text anchor position for placing legend titles."
+        },
         "titleBaseline": {
           "$ref": "#/definitions/TextBaseline",
           "description": "Vertical text baseline for legend titles.\n\n__Default value:__ `\"top\"`."
@@ -6658,6 +7111,10 @@
         "titleOpacity": {
           "description": "Opacity of the legend title.",
           "type": "number"
+        },
+        "titleOrient": {
+          "$ref": "#/definitions/OrientValue",
+          "description": "Orientation of the legend title."
         },
         "titlePadding": {
           "description": "The padding, in pixels, between title and legend.\n\n__Default value:__ `5`.",
@@ -6830,6 +7287,10 @@
           "description": "The minimum separation that must be between label bounding boxes for them to be considered non-overlapping (default `0`). This property is ignored if *labelOverlap* resolution is not enabled.",
           "type": "number"
         },
+        "layout": {
+          "$ref": "#/definitions/LegendLayout",
+          "description": "Legend orient group layout parameters."
+        },
         "offset": {
           "description": "The offset in pixels by which to displace the legend from the data rectangle and axes.\n\n__Default value:__ `18`.",
           "type": "number"
@@ -6873,6 +7334,17 @@
           "$ref": "#/definitions/Color",
           "description": "Default stroke color for legend symbols. Only applied if there is no `\"fill\"` scale color encoding for the legend.\n\n__Default value:__ `\"gray\"`."
         },
+        "symbolDash": {
+          "description": "An array of alternating [stroke, space] lengths for dashed symbol strokes.",
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "symbolDashOffset": {
+          "description": "The pixel offset at which to start drawing with the symbol stroke dash array.",
+          "type": "number"
+        },
         "symbolDirection": {
           "$ref": "#/definitions/Orientation",
           "description": "The default direction (`\"horizontal\"` or `\"vertical\"`) for symbol legends.\n\n__Default value:__ `\"vertical\"`."
@@ -6907,9 +7379,17 @@
           "$ref": "#/definitions/SymbolShape",
           "description": "Default shape type (such as \"circle\") for legend symbols.\nCan be one of ``\"circle\"`, `\"square\"`, `\"cross\"`, `\"diamond\"`, `\"triangle-up\"`, `\"triangle-down\"`, `\"triangle-right\"`, or `\"triangle-left\"`.\n   * In addition to a set of built-in shapes, custom shapes can be defined using [SVG path strings](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths).\n   *\n   * __Default value:__ `\"circle\"`.\n   *"
         },
+        "title": {
+          "description": "Set to null to disable title for the axis or legend",
+          "type": "null"
+        },
         "titleAlign": {
           "$ref": "#/definitions/Align",
           "description": "Horizontal text alignment for legend titles.\n\n__Default value:__ `\"left\"`."
+        },
+        "titleAnchor": {
+          "$ref": "#/definitions/TitleAnchor",
+          "description": "Text anchor position for placing legend titles."
         },
         "titleBaseline": {
           "$ref": "#/definitions/TextBaseline",
@@ -6944,9 +7424,95 @@
           "description": "Opacity of the legend title.",
           "type": "number"
         },
+        "titleOrient": {
+          "$ref": "#/definitions/Orient",
+          "description": "Orientation of the legend title."
+        },
         "titlePadding": {
           "description": "The padding, in pixels, between title and legend.\n\n__Default value:__ `5`.",
           "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "LegendLayout": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor": {
+          "$ref": "#/definitions/TitleAnchor",
+          "description": "The anchor point for legend orient group layout."
+        },
+        "bottom": {
+          "$ref": "#/definitions/BaseLegendLayout"
+        },
+        "bottom-left": {
+          "$ref": "#/definitions/BaseLegendLayout"
+        },
+        "bottom-right": {
+          "$ref": "#/definitions/BaseLegendLayout"
+        },
+        "bounds": {
+          "$ref": "#/definitions/LayoutBounds",
+          "description": "The bounds calculation to use for legend orient group layout."
+        },
+        "center": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "A flag to center legends within a shared orient group."
+        },
+        "direction": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Orientation"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "The layout direction for legend orient group layout."
+        },
+        "left": {
+          "$ref": "#/definitions/BaseLegendLayout"
+        },
+        "margin": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "The pixel margin between legends within a orient group."
+        },
+        "offset": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "$ref": "#/definitions/SignalRef"
+            }
+          ],
+          "description": "The pixel offset from the chart body for a legend orient group."
+        },
+        "right": {
+          "$ref": "#/definitions/BaseLegendLayout"
+        },
+        "top": {
+          "$ref": "#/definitions/BaseLegendLayout"
+        },
+        "top-left": {
+          "$ref": "#/definitions/BaseLegendLayout"
+        },
+        "top-right": {
+          "$ref": "#/definitions/BaseLegendLayout"
         }
       },
       "type": "object"
@@ -7093,7 +7659,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "point": {
@@ -7192,6 +7758,22 @@
             }
           ],
           "description": "The tooltip text string to show upon mouse hover or an object defining which fields should the tooltip be derived from.\n\n- If `tooltip` is `{\"content\": \"encoding\"}`, then all fields from `encoding` will be used.\n- If `tooltip` is `{\"content\": \"data\"}`, then all fields that appear in the highlighted data point will be used.\n- If set to `null`, then no tooltip will be used."
+        },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
         }
       },
       "type": "object"
@@ -7519,7 +8101,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "radius": {
@@ -7601,6 +8183,22 @@
             }
           ],
           "description": "The tooltip text string to show upon mouse hover or an object defining which fields should the tooltip be derived from.\n\n- If `tooltip` is `{\"content\": \"encoding\"}`, then all fields from `encoding` will be used.\n- If `tooltip` is `{\"content\": \"data\"}`, then all fields that appear in the highlighted data point will be used.\n- If set to `null`, then no tooltip will be used."
+        },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
         }
       },
       "type": "object"
@@ -7720,7 +8318,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "point": {
@@ -7843,12 +8441,28 @@
           "$ref": "#/definitions/Mark",
           "description": "The mark type. This could a primitive mark type\n(one of `\"bar\"`, `\"circle\"`, `\"square\"`, `\"tick\"`, `\"line\"`,\n`\"area\"`, `\"point\"`, `\"geoshape\"`, `\"rule\"`, and `\"text\"`)\nor a composite mark type (`\"boxplot\"`, `\"errorband\"`, `\"errorbar\"`)."
         },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
         "x2Offset": {
           "description": "Offset for x2-position.",
           "type": "number"
         },
         "xOffset": {
           "description": "Offset for x-position.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
           "type": "number"
         },
         "y2Offset": {
@@ -8104,10 +8718,25 @@
     },
     "Orient": {
       "enum": [
-        "horizontal",
-        "vertical"
+        "left",
+        "right",
+        "top",
+        "bottom"
       ],
       "type": "string"
+    },
+    "OrientValue": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Orient"
+        },
+        {
+          "$ref": "#/definitions/OrientValueRef"
+        }
+      ]
+    },
+    "OrientValueRef": {
+      "$ref": "#/definitions/ScaledValueRef<Orient>"
     },
     "Orientation": {
       "enum": [
@@ -8215,7 +8844,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "radius": {
@@ -8312,12 +8941,28 @@
           ],
           "description": "The tooltip text string to show upon mouse hover or an object defining which fields should the tooltip be derived from.\n\n- If `tooltip` is `{\"content\": \"encoding\"}`, then all fields from `encoding` will be used.\n- If `tooltip` is `{\"content\": \"data\"}`, then all fields that appear in the highlighted data point will be used.\n- If set to `null`, then no tooltip will be used."
         },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
         "x2Offset": {
           "description": "Offset for x2-position.",
           "type": "number"
         },
         "xOffset": {
           "description": "Offset for x-position.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
           "type": "number"
         },
         "y2Offset": {
@@ -8356,6 +9001,21 @@
         }
       ],
       "minimum": 0
+    },
+    "ParentFieldRef": {
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "type": "number"
+        },
+        "parent": {
+          "$ref": "#/definitions/Field"
+        }
+      },
+      "required": [
+        "parent"
+      ],
+      "type": "object"
     },
     "Parse": {
       "additionalProperties": {
@@ -9356,6 +10016,120 @@
       ],
       "type": "string"
     },
+    "ScaledValueRef<Orient>": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/BaseValueRef<Orient>"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "scale"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "band": {
+              "type": [
+                "boolean",
+                "number"
+              ]
+            },
+            "scale": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "scale",
+            "band"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ScaledValueRef<TitleAnchor>": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/BaseValueRef<TitleAnchor>"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "scale"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "band": {
+              "type": [
+                "boolean",
+                "number"
+              ]
+            },
+            "scale": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "scale",
+            "band"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ScaledValueRef<any[]>": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/BaseValueRef<any[]>"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "scale"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "band": {
+              "type": [
+                "boolean",
+                "number"
+              ]
+            },
+            "scale": {
+              "$ref": "#/definitions/Field"
+            }
+          },
+          "required": [
+            "scale",
+            "band"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "SchemeConfig": {
       "additionalProperties": false,
       "properties": {
@@ -9598,6 +10372,18 @@
     },
     "ShapeValueDefWithCondition": {
       "$ref": "#/definitions/StringValueDefWithCondition<TypeForShape>"
+    },
+    "SignalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "signal": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "signal"
+      ],
+      "type": "object"
     },
     "SingleDefChannel": {
       "anyOf": [
@@ -10102,7 +10888,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "radius": {
@@ -10188,6 +10974,22 @@
             }
           ],
           "description": "The tooltip text string to show upon mouse hover or an object defining which fields should the tooltip be derived from.\n\n- If `tooltip` is `{\"content\": \"encoding\"}`, then all fields from `encoding` will be used.\n- If `tooltip` is `{\"content\": \"data\"}`, then all fields that appear in the highlighted data point will be used.\n- If set to `null`, then no tooltip will be used."
+        },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
         }
       },
       "type": "object"
@@ -10354,7 +11156,7 @@
           "type": "number"
         },
         "orient": {
-          "$ref": "#/definitions/Orient",
+          "$ref": "#/definitions/Orientation",
           "description": "The orientation of a non-stacked bar, tick, area, and line charts.\nThe value is either horizontal (default) or vertical.\n- For bar, rule and tick, this determines whether the size of the bar and tick\nshould be applied to x or y dimension.\n- For area, this property determines the orient property of the Vega output.\n- For line and trail marks, this property determines the sort order of the points in the line\nif `config.sortLineBy` is not specified.\nFor stacked charts, this is always determined by the orientation of the stack;\ntherefore explicitly specified value will be ignored."
         },
         "radius": {
@@ -10441,6 +11243,22 @@
             }
           ],
           "description": "The tooltip text string to show upon mouse hover or an object defining which fields should the tooltip be derived from.\n\n- If `tooltip` is `{\"content\": \"encoding\"}`, then all fields from `encoding` will be used.\n- If `tooltip` is `{\"content\": \"data\"}`, then all fields that appear in the highlighted data point will be used.\n- If set to `null`, then no tooltip will be used."
+        },
+        "x": {
+          "description": "X coordinates of the marks, or width of horizontal `\"bar\"` and `\"area\"` without `x2`.",
+          "type": "number"
+        },
+        "x2": {
+          "description": "X2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinates of the marks, or height of vertical `\"bar\"` and `\"area\"` without `y2`",
+          "type": "number"
+        },
+        "y2": {
+          "description": "Y2 coordinates for ranged `\"area\"`, `\"bar\"`, `\"rect\"`, and  `\"rule\"`.",
+          "type": "number"
         }
       },
       "type": "object"
@@ -10480,11 +11298,15 @@
     },
     "TitleAnchor": {
       "enum": [
+        null,
         "start",
         "middle",
         "end"
       ],
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "TitleConfig": {
       "$ref": "#/definitions/BaseTitleConfig"
@@ -10708,7 +11530,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "title": {
           "anyOf": [
@@ -10948,7 +11770,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "spec": {
           "$ref": "#/definitions/Spec",
@@ -11303,7 +12125,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "spec": {
           "anyOf": [
@@ -11489,7 +12311,7 @@
               "$ref": "#/definitions/RowCol<number>"
             }
           ],
-          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: `20`"
+          "description": "The spacing in pixels between sub-views of the composition operator.\nAn object of the form `{\"row\": number, \"column\": number}` can be used to set\ndifferent spacing values for rows and columns.\n\n__Default value__: Depends on `\"spacing\"` property of [the view composition configuration](https://vega.github.io/vega-lite/docs/config.html#view-config) (`20` by default)"
         },
         "title": {
           "anyOf": [
