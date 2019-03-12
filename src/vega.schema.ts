@@ -8,6 +8,7 @@ import {
   FontStyle as VgFontStyle,
   FontWeight as VgFontWeight,
   LayoutAlign,
+  MarkType,
   Orientation,
   ProjectionType,
   SampleTransform as VgSampleTransform,
@@ -53,7 +54,25 @@ export function isSignalRef(o: any): o is SignalRef {
   return !!o['signal'];
 }
 
-export type EventStream = any;
+interface StreamParameters {
+  between?: Stream[];
+  marktype?: MarkType;
+  markname?: string;
+  filter?: string | string[];
+  throttle?: number;
+  debounce?: number;
+  consume?: boolean;
+}
+
+interface DerivedStream extends StreamParameters {
+  stream: Stream;
+}
+interface MergedStream extends StreamParameters {
+  merge: Stream[];
+}
+type Stream = EventStream | DerivedStream | MergedStream;
+
+export type EventStream = StreamParameters;
 
 // TODO: add type of value (Make it VgValueRef<T> {value?:T ...})
 export interface VgValueRef {
